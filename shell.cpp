@@ -19,7 +19,7 @@ int main () {
     int orig = dup(STDIN_FILENO), orig2 = dup(STDOUT_FILENO);
     if (pipe(fd) == -1) {
         perror("pipe");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     
     // Create child to run first command
@@ -27,7 +27,7 @@ int main () {
     // In child, redirect output to write end of pipe
     if (pid < 0) {
         perror("fork");
-        exit(1);
+        exit(EXIT_FAILURE);
     } else if (pid == 0) {
         dup2(fd[1], STDOUT_FILENO);
     // Close the read end of the pipe on the child side.
@@ -41,7 +41,7 @@ int main () {
 
     if (pid2 < 0) {
         perror("fork");
-        exit(1);
+        exit(EXIT_FAILURE);
     } else if (pid2 == 0) {
     // In child, redirect input to the read end of the pipe
         dup2(fd[0], STDIN_FILENO);
